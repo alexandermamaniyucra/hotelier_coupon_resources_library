@@ -86,7 +86,7 @@ jobs:
 
       - name: Upload the package to the test registry
         run: |
-          python3 -m twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --skip-existing  --repository testpypi dist/*
+          python3 -m twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --skip-existing  --verbose --repository testpypi dist/* 
 
 #      - name: Execute the tests
 #        run: python manage.py test users.tests
