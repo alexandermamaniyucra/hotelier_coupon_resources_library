@@ -28,7 +28,7 @@ class SNSService:
     SNSService class allows to interact with Amazon SNS (Simple Notification Service) for the hotel coupon app.
     """
 
-    def __init__(self, aws_access_key, aws_secret_key, region_name='us-east-1'):
+    def __init__(self, aws_access_key=None, aws_secret_key=None, region_name='us-east-1'):
         """
         Initialize the SNS client with the provided credentials and region.
 
@@ -94,13 +94,24 @@ class SQSDeleteMessageError(Exception):
         self.message = message
         super().__init__(self.message)
 
+class SQSSendMessageError(Exception):
+    """
+    Exception raised for sending SQS messages error.
+
+    Attributes:
+        message -- explanation of the SQS sending message error
+    """
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
 
 class SQSService:
     """
     SQSService class allows to interact with Amazon SQS (Simple Queue Service) for the hotel coupon app.
     """
 
-    def __init__(self, aws_access_key_id, aws_secret_access_key, aws_region, aws_sqs_queue_url):
+    def __init__(self, aws_access_key_id=None, aws_secret_access_key=None, aws_region=None, aws_sqs_queue_url=None):
         """
         Initialize the SQS client with the provided credentials and region.
 
@@ -109,12 +120,14 @@ class SQSService:
         :param aws_region: The AWS region name.
         :param aws_sqs_queue_url: The URL of the SQS queue.
         """
-        self.sqs_client = boto3.client(
-            'sqs',
-            aws_access_key_id=aws_access_key_id,
-            aws_secret_access_key=aws_secret_access_key,
-            region_name=aws_region
-        )
+        if aws_access_key_id == None and aws_secret_access_key==None and aws_region==None:
+            self.sqs_client = boto3.client('sqs')
+        else:
+            self.sqs_client = boto3.client(
+                'sqs',
+                aws_access_key_id=aws_access_key_id,
+                aws_secret_access_key=aws_secret_access_key,
+                region_name=aws_region )
         self.queue_url = aws_sqs_queue_url
 
     def delete_message(self, queue_url, receipt_handle):
@@ -132,6 +145,13 @@ class SQSService:
             print(f"Deleted message with receipt handle: {receipt_handle}")
         except (BotoCoreError, ClientError) as e:
             raise SQSDeleteMessageError(f"Error when it was deleting messages: {e}")
+
+    def send_message(self, message_body):
+        json_data = json.dumps(message_body)
+        return self.sqs_client.send_message(
+            QueueUrl= self.queue_url,
+            MessageBody=json_data
+        )
 
     def receive_messages(self, queue_url, max_messages=1, wait_time=0, visibility_timeout=30):
         """
