@@ -1,7 +1,3 @@
-# from hotel_coupon_app_package_alexandermamani.report_pdf  import ReportPDF
-
-
-
 from hotel_coupon_app_package_alexandermamani.report_pdf import ReportPDF
 
 
