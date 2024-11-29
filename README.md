@@ -17,7 +17,7 @@ This package also includes the following Exceptions:
 To install the hotel coupon package, use:
 
 ```sh
-pip install -i https://test.pypi.org/simple/ hotel_coupon_app_package_alexandermamani
+pip install hotel-coupon-app-package-alexandermamani
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ pip install -i https://test.pypi.org/simple/ hotel_coupon_app_package_alexanderm
 #### ReportPDF
 
 ```python
-from hotelier_coupon_resources.report_pdf import ReportPDF
+from hotel_coupon_app_package_alexandermamani.report_pdf import ReportPDF
 
 coupon_gral_information = {}
 coupon_gral_information['1'] = {}
@@ -65,7 +65,7 @@ report_pdf_buffer = report.generate()
 #### SNSService
 To notify a specific user about a coupon usage, you can use the following code:
 ```python
-from hotelier_coupon_resources.aws_services import SNSService, SNSPublishMessageError
+from hotel_coupon_app_package_alexandermamani.aws_services import SNSService, SNSPublishMessageError
 import environ
 
 env = environ.Env()
@@ -95,7 +95,7 @@ except SNSPublishMessageError as e:
 #### Example of polling user interaction data from AWS SQS to generate a custom report PDF
 
 ```python
-from hotelier_coupon_resources.aws_services import SQSService, SQSPollingMessagesError,SQSClosingConnectionError
+from hotel_coupon_app_package_alexandermamani.aws_services import SQSService, SQSPollingMessagesError,SQSClosingConnectionError
 import environ
 import json
 from functools import partial
