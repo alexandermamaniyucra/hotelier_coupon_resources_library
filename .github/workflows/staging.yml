@@ -47,7 +47,7 @@ jobs:
 #      - name: Execute the tests
 #        run: python manage.py test users.tests
 
-  publish_to_pypi_test_registry:
+  publish_to_pypi_registry:
     # Job that run the unit tests
     name: Publish new version to PyPi test registry
     # Runner to use
@@ -87,7 +87,7 @@ jobs:
 
       - name: Upload the package to the test registry
         run: |
-          python3 -m twine upload -u __token__ -p ${{ secrets.PYPI_TOKEN }} --skip-existing  --verbose --repository testpypi dist/* 
+          python3 -m twine upload -u __token__ -p ${{ secrets.PYPI_TOKEN }} --skip-existing  --verbose dist/* 
 
 #      - name: Execute the tests
 #        run: python manage.py test users.tests
@@ -96,7 +96,7 @@ jobs:
   create-pull-request-to-pre-production:
     # Job that run the unit tests
     name: Pull request to Main branch
-    needs: publish_to_pypi_test_registry
+    needs: publish_to_pypi_registry
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
