@@ -36,7 +36,7 @@ class ReportPDF:
         self.hotelier_name = hotelier_name
         self.current_day = datetime.datetime.now().date()
         self.fileName = fileName
-        self.title_text = f"{self.hotelier_name} Roupon Report"
+        self.title_text = f"{self.hotelier_name} Coupon Report"
         self.range_dates_text = f"User coupon interaction from {self.from_date_report} to {self.current_day}"
         self.general_information_text=f"General information about your coupons"
         if self.fileName:
