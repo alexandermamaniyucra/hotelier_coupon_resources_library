@@ -16,6 +16,78 @@ from reportlab.platypus import TableStyle
 from reportlab.lib import colors
 import io
 
+class ReportCustomPDF:
+    def __init__(self, data, fileName=None):
+        self.data = data
+        self.fileName = fileName
+        self.current_day = datetime.datetime.now().date()
+        self.range_dates_text = f"Report generated at {self.current_day}"
+        if self.fileName:
+            self.report = SimpleDocTemplate(self.fileName, pagesize=letter)
+        else:
+            self.buffer = io.BytesIO()
+            self.report = SimpleDocTemplate(self.buffer, pagesize=letter)
+
+    def set_styles(self):
+        """
+        Set the styles for the PDF Tables
+        """
+        style = TableStyle([
+            ('BACKGROUND', (0, 0), (4, 0), colors.orange),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Courier-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 14),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ])
+
+        border_styles = TableStyle(
+            [
+                ('BOX', (0, 0), (-1, -1), 2, colors.black),
+                ('LINEBEFORE', (2, 1), (2, -1), 2, colors.red),
+                ('LINEABOVE', (0, 2), (-1, 2), 2, colors.orange),
+                ('GRID', (0, 0), (-1, -1), 2, colors.black),
+            ]
+        )
+
+        self.table_general_information.setStyle(style)
+        self.table_general_information.setStyle(border_styles)
+
+
+    def get_data(self):
+        data_set = []
+        table_header = self.data['report_table_data_header']
+        data_set.append([table_header['column1'], table_header['column2'], table_header['column3'], table_header['column4']])
+        for value in self.data['report_table_data_body']:
+            data_set.append([value['column1'], value['column2'], value['column3'], value['column4']])
+        return data_set
+
+    def generate(self):
+        general_information_dataset = self.get_data()
+        self.table_general_information = Table(general_information_dataset)
+        self.set_styles()
+        styles = getSampleStyleSheet()
+        two_breakline = Paragraph("<br/><br/>", styles['BodyText'])
+        one_breakline = Paragraph("<br/>", styles['Title'])
+        title = Paragraph(self.data["report_title"], styles['Title'])
+        range_dates_text = Paragraph(self.range_dates_text, styles['Heading2'])
+        general_information_text = Paragraph(self.data["report_description"], styles['Heading2'])
+
+        elems = []
+        elems.append(title)
+        elems.append(two_breakline)
+        elems.append(range_dates_text)
+        elems.append(two_breakline)
+        elems.append(general_information_text)
+        elems.append(one_breakline)
+        elems.append(self.table_general_information)
+
+        self.report.build(elems)
+        if not self.fileName:
+            self.buffer.seek(0)
+            return self.buffer
+
 
 class ReportPDF:
     """
