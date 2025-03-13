@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "hotel_coupon_app_package_alexandermamani"
-version = "1.1.2"
+version = "1.1.8"
 authors = [
   { name="Alexander Mamani", email="x233298@student.ncirl.ie" }
 ]
