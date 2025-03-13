@@ -22,6 +22,12 @@ class ReportCustomPDF:
         self.fileName = fileName
         self.current_day = datetime.datetime.now().date()
         self.range_dates_text = f"Report generated at {self.current_day}"
+        self.order_id = self.data['order_id']
+        self.name = self.data['name']
+        self.email = self.data['email']
+        self.shipping_address = self.data['shipping_address']
+        self.total = self.data['total']
+
         if self.fileName:
             self.report = SimpleDocTemplate(self.fileName, pagesize=letter)
         else:
@@ -74,14 +80,35 @@ class ReportCustomPDF:
         range_dates_text = Paragraph(self.range_dates_text, styles['Heading2'])
         general_information_text = Paragraph(self.data["report_description"], styles['Heading2'])
 
+        order_id = Paragraph(f'Order: {self.order_id}', styles['Heading2'])
+        name = Paragraph(f'Name: {self.name}', styles['Heading2'])
+        email = Paragraph(f'Email: {self.email}', styles['Heading2'])
+        shipping_address = Paragraph(f'Shipping Address: {self.shipping_address}', styles['Heading2'])
+        ordered_items_text = Paragraph(f'Ordered Items', styles['Heading1'])
+
+        total = Paragraph(f'Total: {self.total}', styles['Heading2'])
+
         elems = []
         elems.append(title)
         elems.append(two_breakline)
         elems.append(range_dates_text)
         elems.append(two_breakline)
-        elems.append(general_information_text)
+        elems.append(order_id)
+        # elems.append(two_breakline)
+        elems.append(name)
+        # elems.append(two_breakline)
+        elems.append(email)
+        # elems.append(two_breakline)
+        elems.append(shipping_address)
+        elems.append(two_breakline)
+        elems.append(ordered_items_text)
+
+        # elems.append(general_information_text)
         elems.append(one_breakline)
         elems.append(self.table_general_information)
+
+        elems.append(one_breakline)
+        elems.append(total)
 
         self.report.build(elems)
         if not self.fileName:

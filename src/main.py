@@ -33,6 +33,13 @@ def main1():
 
 def main2():
     data = {}
+
+    data['order_id'] = "order_id"
+    data['name'] = "name"
+    data['email'] = "email"
+    data['shipping_address'] = "shipping_address"
+    data['total'] = "total"
+
     data['report_title'] = "Report Name"
     data['report_description'] = "This is an example of a report description"
     data['report_table_data_header'] = {"column1": "Order id", "column2": "Product name", "column3": "Quantity", "column4": "Price"}
